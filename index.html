@@ -4,18 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinBank Mobile</title>
-    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: {
-                            DEFAULT: '#003366',
-                            dark: '#002244',
-                            light: '#0066aa',
-                        },
+                        primary: { DEFAULT: '#003366', dark: '#002244', light: '#0066aa' },
                         secondary: '#d81e05',
                         success: '#01a299',
                         warning: '#f0a500',
@@ -25,33 +20,14 @@
             }
         }
     </script>
-    <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Custom scrollbar for better user experience */
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background-color: rgba(0, 51, 102, 0.3);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        body {
-            background-color: #f0f2f5;
-        }
-
-        .app-container {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(0, 51, 102, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        body { background-color: #f0f2f5; }
+        .app-container { background-color: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); overflow: hidden; }
     </style>
 </head>
 <body class="min-h-screen p-4">
@@ -59,9 +35,7 @@
         <div x-data="bankApp" class="bg-gray-100 text-gray-800 relative min-h-screen overflow-x-hidden text-base pb-20">
             <!-- Header -->
             <div class="bg-primary text-white shadow-md sticky top-0 z-20">
-                <!-- Compact, efficient top bar with more prominent bank name -->
                 <div class="px-4 py-3 flex items-center justify-between">
-                    <!-- Left: Logo and larger bank name -->
                     <div class="flex items-center">
                         <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3 19H21V22H3V19Z" fill="currentColor"/>
@@ -73,36 +47,26 @@
                         </svg>
                         <span class="text-base sm:text-lg font-bold tracking-wide">FIRST UNION BANK</span>
                     </div>
-
-                    <!-- Modern banking app style action buttons -->
                     <div class="flex items-center">
-                        <!-- Search button - common in banking apps -->
-                        <button class="w-8 h-8 flex items-center justify-center text-blue-100 hover:bg-blue-800 rounded-full mr-1" @click="alert('Search clicked')">
+                        <button class="w-8 h-8 flex items-center justify-center text-blue-100 hover:bg-blue-800 rounded-full mr-1" @click="showSearch = !showSearch">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </button>
-
-                        <!-- Notification bell with a more refined style -->
-                        <button class="w-8 h-8 flex items-center justify-center text-blue-100 hover:bg-blue-800 rounded-full relative mr-1" @click="alert('Notifications clicked')">
+                        <button class="w-8 h-8 flex items-center justify-center text-blue-100 hover:bg-blue-800 rounded-full relative mr-1" @click="showNotifications = !showNotifications">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
-                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-medium">2</span>
+                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-medium">3</span>
                         </button>
-
-                        <!-- User profile with avatar circle - modern banking style -->
-                        <button class="flex items-center justify-center ml-1" @click="alert('Profile clicked')">
+                        <button class="flex items-center justify-center ml-1" @click="showProfile = !showProfile">
                             <div class="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-sm font-medium border-2 border-blue-600">
                                 <span x-text="userName.charAt(0)"></span>
                             </div>
                         </button>
                     </div>
                 </div>
-
-                <!-- Modern account overview with adjusted user name and combined balance -->
                 <div class="bg-primary-light px-4 py-3 flex justify-between items-center border-t border-blue-700">
-                    <!-- User identity with larger welcome -->
                     <div class="flex flex-col">
                         <div class="font-medium text-base">
                             Welcome, <span x-text="userName" class="font-semibold cursor-pointer" @click="editUserName()"></span>
@@ -117,643 +81,326 @@
                             <span class="text-xs text-blue-100">Last login: Today, 10:45 AM</span>
                         </div>
                     </div>
-
-                    <!-- Combined account balance -->
                     <div class="flex flex-col items-end">
                         <div class="text-xs text-blue-100">Total Available</div>
                         <div class="text-lg font-bold" x-text="formatCurrency(checkingBalance + savingsBalance)"></div>
-                        <div class="text-xs text-blue-100 mt-0.5">
-                            Across All Accounts
-                        </div>
+                        <div class="text-xs text-blue-100 mt-0.5">Across All Accounts</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Account Cards -->
-            <div class="px-4 flex flex-col gap-3 mt-4">
-                <div class="bg-white rounded-lg shadow p-5 border-l-4 transition-all relative cursor-pointer"
-                     :class="{
-                        'border-secondary opacity-100 ring-2 ring-secondary ring-opacity-30 shadow-lg scale-[1.02]': activeAccount === 'checking',
-                        'border-gray-200 opacity-90 hover:-translate-y-0.5 hover:shadow-lg': activeAccount !== 'checking'
-                     }"
-                     @click="setActiveAccount('checking')">
-                    <div class="flex justify-between items-start">
-                        <div class="text-sm text-gray-500 mb-2 uppercase tracking-wide font-medium">Checking Account</div>
-                        <div x-show="activeAccount === 'checking'" class="bg-secondary text-white text-xs px-2 py-1 rounded-full">Active</div>
-                    </div>
-                    <div class="text-3xl font-bold mb-4 cursor-pointer"
-                         x-text="formatCurrency(checkingBalance)"
-                         @click.stop="editBalance('checking')"></div>
-                    <div class="text-sm text-gray-500 flex items-center border-t border-gray-100 pt-3">
-                        <span x-text="checkingAccountNumber" @click.stop="editAccountNumber('checking')"></span>
-                        <span class="cursor-pointer ml-2" @click.stop="copyToClipboard(checkingAccountNumber)">📋</span>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow p-5 border-l-4 transition-all relative cursor-pointer"
-                     :class="{
-                        'border-success opacity-100 ring-2 ring-success ring-opacity-30 shadow-lg scale-[1.02]': activeAccount === 'savings',
-                        'border-gray-200 opacity-90 hover:-translate-y-0.5 hover:shadow-lg': activeAccount !== 'savings'
-                     }"
-                     @click="setActiveAccount('savings')">
-                    <div class="flex justify-between items-start">
-                        <div class="text-sm text-gray-500 mb-2 uppercase tracking-wide font-medium">Savings Account</div>
-                        <div x-show="activeAccount === 'savings'" class="bg-success text-white text-xs px-2 py-1 rounded-full">Active</div>
-                    </div>
-                    <div class="text-3xl font-bold mb-4 cursor-pointer"
-                         x-text="formatCurrency(savingsBalance)"
-                         @click.stop="editBalance('savings')"></div>
-                    <div class="text-sm text-gray-500 flex items-center border-t border-gray-100 pt-3">
-                        <span x-text="savingsAccountNumber" @click.stop="editAccountNumber('savings')"></span>
-                        <span class="cursor-pointer ml-2" @click.stop="copyToClipboard(savingsAccountNumber)">📋</span>
-                    </div>
+            <!-- Search Overlay -->
+            <div x-show="showSearch" class="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center" @click.away="showSearch = false">
+                <div class="bg-white rounded-lg p-5 w-11/12 max-w-md">
+                    <h3 class="text-lg font-semibold mb-4">Search Transactions</h3>
+                    <input type="text" class="w-full p-3 border rounded-md" placeholder="Search by description or amount" @keyup="searchTransactions($event.target.value)">
+                    <button @click="showSearch = false" class="mt-4 px-4 py-2 bg-primary text-white rounded-md">Close</button>
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="text-sm font-semibold text-gray-500 uppercase tracking-wide mx-4 mt-6 mb-2">Quick Actions</div>
-            <div class="flex justify-between px-4 py-4 mx-4 mb-6 bg-white rounded-lg shadow">
-                <template x-for="action in quickActions" :key="action.id">
-                    <div class="flex flex-col items-center w-16 text-center cursor-pointer transition-all"
-                         @click="setActiveAction(action.id)"
-                         :class="{ 'scale-105': currentAction === action.id }">
-                        <div class="bg-primary w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow text-white transition-all"
-                             :class="{ 'bg-primary-light transform scale-110': currentAction === action.id }"
-                             x-html="action.icon"></div>
-                        <div class="text-xs font-medium"
-                             :class="{ 'text-primary-light font-bold': currentAction === action.id, 'text-gray-800': currentAction !== action.id }"
-                             x-text="action.label"></div>
-                    </div>
-                </template>
+            <!-- Notifications Panel -->
+            <div x-show="showNotifications" class="fixed top-16 right-4 bg-white rounded-lg shadow-lg p-4 w-80 z-40" @click.away="showNotifications = false">
+                <h3 class="text-lg font-semibold mb-3">Notifications</h3>
+                <div class="space-y-2">
+                    <div class="p-2 bg-gray-100 rounded-md"><p class="text-sm">Payment Received: $25 from John</p><p class="text-xs text-gray-500">5 mins ago</p></div>
+                    <div class="p-2 bg-gray-100 rounded-md"><p class="text-sm">Deposit Confirmed: $25,000</p><p class="text-xs text-gray-500">1 hr ago</p></div>
+                    <div class="p-2 bg-gray-100 rounded-md"><p class="text-sm">Security Alert: Login from new device</p><p class="text-xs text-gray-500">2 hrs ago</p></div>
+                </div>
             </div>
 
-            <!-- Action Title -->
-            <div class="text-sm font-semibold text-gray-500 uppercase tracking-wide mx-4 mb-2" x-text="activeActionTitle"></div>
+            <!-- Profile Panel -->
+            <div x-show="showProfile" class="fixed top-16 right-4 bg-white rounded-lg shadow-lg p-4 w-80 z-40" @click.away="showProfile = false">
+                <h3 class="text-lg font-semibold mb-3" x-text="'Hello, ' + userName"></h3>
+                <p class="text-sm text-gray-600">Account: <span x-text="activeAccount === 'checking' ? checkingAccountNumber : savingsAccountNumber"></span></p>
+                <p class="text-sm text-gray-600">Balance: <span x-text="formatCurrency(activeAccount === 'checking' ? checkingBalance : savingsBalance)"></span></p>
+                <button @click="editUserName(); showProfile = false" class="mt-4 w-full p-2 bg-primary text-white rounded-md">Edit Profile</button>
+            </div>
 
-            <!-- Action Content Container -->
-            <div class="mx-4 mb-6 bg-white rounded-lg shadow overflow-hidden">
-                <!-- Send Money Form -->
-                <div class="p-5" x-show="currentAction === 'send'">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Send Funds</h2>
-                    <label for="externalFrom" class="block text-sm font-medium text-gray-500 mt-3">From Account</label>
-                    <select id="externalFrom"
-                            class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                            x-model="fromAccount">
-                        <option x-text="checkingAccountNumber" :value="checkingAccountNumber"></option>
-                        <option x-text="savingsAccountNumber" :value="savingsAccountNumber"></option>
-                    </select>
-
-                    <label for="externalTo" class="block text-sm font-medium text-gray-500 mt-3">To Account/Email</label>
-                    <input id="externalTo"
-                           type="text"
-                           class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                           x-model="toAccount"
-                           placeholder="Recipient Account or Email">
-
-                    <label for="externalAmount" class="block text-sm font-medium text-gray-500 mt-3">Amount</label>
-                    <input id="externalAmount"
-                           type="number"
-                           class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                           x-model="transferAmount"
-                           step="0.01"
-                           placeholder="$0.00">
-
-                    <button @click="transferFunds()"
-                            class="w-full p-3 mt-4 bg-primary text-white font-semibold rounded-md transition hover:bg-primary-dark">
-                        Send Money
-                    </button>
+            <!-- Main Content -->
+            <div class="relative">
+                <!-- Loading Overlay -->
+                <div x-show="isLoading" class="fixed inset-0 bg-black bg-opacity-30 z-40 flex items-center justify-center">
+                    <div class="bg-white rounded-lg p-4 shadow-lg"><p class="text-gray-800 font-semibold">Processing...</p></div>
                 </div>
 
-                <!-- Deposit Form -->
-                <div class="p-5" x-show="currentAction === 'deposit'">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Deposit Funds</h2>
-                    <label for="depositTo" class="block text-sm font-medium text-gray-500 mt-3">To Account</label>
-                    <select id="depositTo"
-                            class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                            x-model="depositToAccount">
-                        <option x-text="'Checking - ' + formatCurrency(checkingBalance)" value="checking"></option>
-                        <option x-text="'Savings - ' + formatCurrency(savingsBalance)" value="savings"></option>
-                    </select>
-
-                    <label for="depositAmount" class="block text-sm font-medium text-gray-500 mt-3">Amount</label>
-                    <input id="depositAmount"
-                           type="number"
-                           class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                           x-model="depositAmount"
-                           step="0.01"
-                           placeholder="$0.00">
-
-                    <label for="depositSource" class="block text-sm font-medium text-gray-500 mt-3">Source</label>
-                    <select id="depositSource"
-                            class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                            x-model="depositSource">
-                        <option value="Cash Deposit">Cash Deposit</option>
-                        <option value="Check Deposit">Check Deposit</option>
-                        <option value="Mobile Deposit">Mobile Deposit</option>
-                        <option value="Direct Deposit">Direct Deposit</option>
-                    </select>
-
-                    <button @click="makeDeposit()"
-                            class="w-full p-3 mt-4 bg-primary text-white font-semibold rounded-md transition hover:bg-primary-dark">
-                        Deposit
-                    </button>
+                <!-- Server Error Modal -->
+                <div x-show="showServerError" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" @click.away="closeServerError()">
+                    <div class="bg-white rounded-lg p-6 w-11/12 max-w-md shadow-xl">
+                        <h3 class="text-lg font-bold text-red-600 mb-2">Error</h3>
+                        <p class="text-gray-600 mb-4" x-text="serverErrorMessage"></p>
+                        <button @click="closeServerError()" class="w-full p-3 bg-primary text-white rounded-md hover:bg-primary-dark">Close</button>
+                    </div>
                 </div>
 
-                <!-- Transfer Between Accounts Form -->
-                <div class="p-5" x-show="currentAction === 'transfer'">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Transfer Between Accounts</h2>
-                    <label for="internalFrom" class="block text-sm font-medium text-gray-500 mt-3">From Account</label>
-                    <select id="internalFrom"
-                            class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                            x-model="internalFromAccount">
-                        <option x-text="'Checking - ' + formatCurrency(checkingBalance)" value="checking"></option>
-                        <option x-text="'Savings - ' + formatCurrency(savingsBalance)" value="savings"></option>
-                    </select>
-
-                    <label for="internalTo" class="block text-sm font-medium text-gray-500 mt-3">To Account</label>
-                    <select id="internalTo"
-                            class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                            x-model="internalToAccount">
-                        <option x-text="'Savings - ' + formatCurrency(savingsBalance)" value="savings" x-show="internalFromAccount === 'checking'"></option>
-                        <option x-text="'Checking - ' + formatCurrency(checkingBalance)" value="checking" x-show="internalFromAccount === 'savings'"></option>
-                    </select>
-
-                    <label for="internalAmount" class="block text-sm font-medium text-gray-500 mt-3">Amount</label>
-                    <input id="internalAmount"
-                           type="number"
-                           class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base"
-                           x-model="internalTransferAmount"
-                           step="0.01"
-                           placeholder="$0.00">
-
-                    <button @click="transferBetweenAccounts()"
-                            class="w-full p-3 mt-4 bg-primary text-white font-semibold rounded-md transition hover:bg-primary-dark">
-                        Transfer
-                    </button>
-                </div>
-
-                <!-- Cards Management -->
-                <div class="p-5" x-show="currentAction === 'cards'" x-data="{ showReportDialog: false, showVerificationIssue: false, attemptCount: 0 }">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Manage Cards</h2>
-                    <div class="flex flex-col gap-4">
-                        <!-- Debit Card -->
-                        <div x-data="{ isLocked: localStorage.getItem('debitCardLocked') === 'true' || false }"
-                             x-init="$watch('isLocked', value => localStorage.setItem('debitCardLocked', value))"
-                             class="bg-gradient-to-br from-primary to-primary-dark text-white rounded-xl p-4 shadow-md relative overflow-hidden"
-                             :class="{ 'opacity-75 grayscale': isLocked }">
-                            <!-- Card content -->
-                            <div class="text-lg tracking-wider mb-5">**** **** **** 4567</div>
-                            <div class="flex justify-between mb-4">
-                                <div class="text-sm font-medium" x-text="userName"></div>
-                                <div class="text-sm opacity-80">Debit Card</div>
-                                <div class="text-sm">Exp: 05/28</div>
+                <!-- Home Page -->
+                <div x-show="currentPage === 'home'" class="mt-4">
+                    <!-- Account Cards -->
+                    <div class="px-4 flex flex-col gap-3">
+                        <div class="bg-white rounded-lg shadow p-5 border-l-4 transition-all relative cursor-pointer"
+                             :class="{ 'border-secondary opacity-100 ring-2 ring-secondary ring-opacity-30 shadow-lg scale-[1.02]': activeAccount === 'checking', 'border-gray-200 opacity-90 hover:-translate-y-0.5 hover:shadow-lg': activeAccount !== 'checking' }"
+                             @click="setActiveAccount('checking')">
+                            <div class="flex justify-between items-start">
+                                <div class="text-sm text-gray-500 mb-2 uppercase tracking-wide font-medium">Checking Account</div>
+                                <div x-show="activeAccount === 'checking'" class="bg-secondary text-white text-xs px-2 py-1 rounded-full">Active</div>
                             </div>
-
-                            <!-- Simple actions -->
-                            <div class="flex items-center justify-between border-t border-white border-opacity-20 pt-3">
-                                <button @click="showReportDialog = true" class="text-sm hover:underline">Order New Card</button>
-                                <button @click="isLocked = !isLocked"
-                                        class="px-3 py-1 bg-white bg-opacity-20 rounded-lg text-sm hover:bg-opacity-30">
-                                    <span x-text="isLocked ? 'Unlock Card' : 'Lock Card'"></span>
-                                </button>
-                            </div>
-
-                            <!-- Lock overlay badge -->
-                            <div x-show="isLocked" class="absolute top-0 right-0 mt-3 mr-3">
-                                <div class="bg-white text-primary font-semibold px-2 py-1 rounded text-xs">
-                                    <svg class="w-3 h-3 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                    </svg>
-                                    LOCKED
-                                </div>
+                            <div class="text-3xl font-bold mb-4 cursor-pointer" x-text="formatCurrency(checkingBalance)" @click.stop="editBalance('checking')"></div>
+                            <div class="text-sm text-gray-500 flex items-center border-t border-gray-100 pt-3">
+                                <span x-text="checkingAccountNumber" @click.stop="editAccountNumber('checking')"></span>
+                                <span class="cursor-pointer ml-2" @click.stop="copyToClipboard(checkingAccountNumber)">📋</span>
                             </div>
                         </div>
-
-                        <!-- Credit Card -->
-                        <div x-data="{ isLocked: localStorage.getItem('creditCardLocked') === 'true' || false }"
-                             x-init="$watch('isLocked', value => localStorage.setItem('creditCardLocked', value))"
-                             class="bg-gradient-to-br from-secondary to-red-800 text-white rounded-xl p-4 shadow-md relative overflow-hidden"
-                             :class="{ 'opacity-75 grayscale': isLocked }">
-                            <!-- Card content -->
-                            <div class="text-lg tracking-wider mb-5">**** **** **** 9876</div>
-                            <div class="flex justify-between mb-4">
-                                <div class="text-sm font-medium" x-text="userName"></div>
-                                <div class="text-sm opacity-80">Credit Card</div>
-                                <div class="text-sm">Exp: 03/27</div>
+                        <div class="bg-white rounded-lg shadow p-5 border-l-4 transition-all relative cursor-pointer"
+                             :class="{ 'border-success opacity-100 ring-2 ring-success ring-opacity-30 shadow-lg scale-[1.02]': activeAccount === 'savings', 'border-gray-200 opacity-90 hover:-translate-y-0.5 hover:shadow-lg': activeAccount !== 'savings' }"
+                             @click="setActiveAccount('savings')">
+                            <div class="flex justify-between items-start">
+                                <div class="text-sm text-gray-500 mb-2 uppercase tracking-wide font-medium">Savings Account</div>
+                                <div x-show="activeAccount === 'savings'" class="bg-success text-white text-xs px-2 py-1 rounded-full">Active</div>
                             </div>
-
-                            <!-- Simple actions -->
-                            <div class="flex items-center justify-between border-t border-white border-opacity-20 pt-3">
-                                <button @click="showReportDialog = true" class="text-sm hover:underline">Order New Card</button>
-                                <button @click="isLocked = !isLocked"
-                                        class="px-3 py-1 bg-white bg-opacity-20 rounded-lg text-sm hover:bg-opacity-30">
-                                    <span x-text="isLocked ? 'Unlock Card' : 'Lock Card'"></span>
-                                </button>
-                            </div>
-
-                            <!-- Lock overlay badge -->
-                            <div x-show="isLocked" class="absolute top-0 right-0 mt-3 mr-3">
-                                <div class="bg-white text-secondary font-semibold px-2 py-1 rounded text-xs">
-                                    <svg class="w-3 h-3 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                    </svg>
-                                    LOCKED
-                                </div>
+                            <div class="text-3xl font-bold mb-4 cursor-pointer" x-text="formatCurrency(savingsBalance)" @click.stop="editBalance('savings')"></div>
+                            <div class="text-sm text-gray-500 flex items-center border-t border-gray-100 pt-3">
+                                <span x-text="savingsAccountNumber" @click.stop="editAccountNumber('savings')"></span>
+                                <span class="cursor-pointer ml-2" @click.stop="copyToClipboard(savingsAccountNumber)">📋</span>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Add new card button with verification issue popup -->
-                        <div>
-                            <button class="p-4 bg-gray-100 text-primary font-semibold border-2 border-dashed border-primary rounded-xl text-center transition hover:bg-primary hover:bg-opacity-5 flex items-center justify-center w-full"
-                                    @click="showVerificationIssue = true; attemptCount++">
-                                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                                Add New Card
+                    <!-- Quick Actions -->
+                    <div class="text-sm font-semibold text-gray-500 uppercase tracking-wide mx-4 mt-6 mb-2">Quick Actions</div>
+                    <div class="flex justify-between px-4 py-4 mx-4 mb-6 bg-white rounded-lg shadow">
+                        <template x-for="action in quickActions" :key="action.id">
+                            <div class="flex flex-col items-center w-16 text-center cursor-pointer transition-all"
+                                 @click="setActiveAction(action.id)"
+                                 :class="{ 'scale-105': currentAction === action.id }">
+                                <div class="bg-primary w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow text-white transition-all"
+                                     :class="{ 'bg-primary-light transform scale-110': currentAction === action.id }"
+                                     x-html="action.icon"></div>
+                                <div class="text-xs font-medium" :class="{ 'text-primary-light font-bold': currentAction === action.id, 'text-gray-800': currentAction !== action.id }" x-text="action.label"></div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Action Content -->
+                    <div class="text-sm font-semibold text-gray-500 uppercase tracking-wide mx-4 mb-2" x-text="activeActionTitle"></div>
+                    <div class="mx-4 mb-6 bg-white rounded-lg shadow overflow-hidden">
+                        <div class="p-5" x-show="currentAction === 'send'">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Send Funds</h2>
+                            <label for="externalFrom" class="block text-sm font-medium text-gray-500 mt-3">From Account</label>
+                            <select id="externalFrom" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="fromAccount">
+                                <option x-text="checkingAccountNumber" :value="checkingAccountNumber"></option>
+                                <option x-text="savingsAccountNumber" :value="savingsAccountNumber"></option>
+                            </select>
+                            <label for="externalTo" class="block text-sm font-medium text-gray-500 mt-3">To Account/Email</label>
+                            <input id="externalTo" type="text" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="toAccount" placeholder="Recipient Account or Email">
+                            <label for="externalAmount" class="block text-sm font-medium text-gray-500 mt-3">Amount</label>
+                            <input id="externalAmount" type="number" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="transferAmount" step="0.01" placeholder="$0.00">
+                            <button @click="transferFunds()" class="w-full p-3 mt-4 bg-primary text-white font-semibold rounded-md transition hover:bg-primary-dark" :disabled="isLoading">
+                                <span x-show="!isLoading">Send Money</span>
+                                <span x-show="isLoading">Processing...</span>
                             </button>
                         </div>
-
-                        <!-- Order New Card Dialog -->
-                        <div x-show="showReportDialog"
-                             class="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black bg-opacity-50"
-                             x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="opacity-0"
-                             x-transition:enter-end="opacity-100"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100"
-                             x-transition:leave-end="opacity-0"
-                             @keydown.escape="showReportDialog = false">
-                            <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6"
-                                 @click.away="showReportDialog = false"
-                                 x-transition:enter="transition ease-out duration-300"
-                                 x-transition:enter-start="opacity-0 transform scale-95"
-                                 x-transition:enter-end="opacity-100 transform scale-100"
-                                 x-transition:leave="transition ease-in duration-200"
-                                 x-transition:leave-start="opacity-100 transform scale-100"
-                                 x-transition:leave-end="opacity-0 transform scale-95">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-xl font-bold text-gray-800">Order New Card</h3>
-                                    <button @click="showReportDialog = false" class="text-gray-400 hover:text-gray-600">
-                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div class="mb-4">
-                                    <p class="text-gray-600 mb-4">Please select a reason for requesting a new card:</p>
-
-                                    <div class="space-y-2">
-                                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                                            <input type="radio" name="newCardReason" value="lost" class="mr-3" checked>
-                                            <div>
-                                                <div class="font-medium">Lost Card</div>
-                                                <div class="text-sm text-gray-500">I can't find my current card</div>
-                                            </div>
-                                        </label>
-
-                                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                                            <input type="radio" name="newCardReason" value="damaged" class="mr-3">
-                                            <div>
-                                                <div class="font-medium">Damaged Card</div>
-                                                <div class="text-sm text-gray-500">My card is damaged and needs replacing</div>
-                                            </div>
-                                        </label>
-
-                                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                                            <input type="radio" name="newCardReason" value="expired" class="mr-3">
-                                            <div>
-                                                <div class="font-medium">Expiring Soon</div>
-                                                <div class="text-sm text-gray-500">My card is expiring soon</div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4">
-                                    <div class="flex items-start">
-                                        <div class="text-blue-600 mt-0.5">
-                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm text-blue-700">A new card will be mailed to your address on file. Your current card will remain active until you activate the new one.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="flex gap-3 justify-end">
-                                    <button @click="showReportDialog = false" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                                        Cancel
-                                    </button>
-                                    <button @click="showVerificationIssue = true; showReportDialog = false; attemptCount++" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">
-                                        Order New Card
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="p-5" x-show="currentAction === 'deposit'">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Deposit Funds</h2>
+                            <label for="depositTo" class="block text-sm font-medium text-gray-500 mt-3">To Account</label>
+                            <select id="depositTo" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="depositToAccount">
+                                <option x-text="'Checking - ' + formatCurrency(checkingBalance)" value="checking"></option>
+                                <option x-text="'Savings - ' + formatCurrency(savingsBalance)" value="savings"></option>
+                            </select>
+                            <label for="depositAmount" class="block text-sm font-medium text-gray-500 mt-3">Amount</label>
+                            <input id="depositAmount" type="number" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="depositAmount" step="0.01" placeholder="$0.00">
+                            <label for="depositSource" class="block text-sm font-medium text-gray-500 mt-3">Source</label>
+                            <select id="depositSource" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="depositSource">
+                                <option value="Cash Deposit">Cash Deposit</option>
+                                <option value="Check Deposit">Check Deposit</option>
+                                <option value="Mobile Deposit">Mobile Deposit</option>
+                                <option value="Direct Deposit">Direct Deposit</option>
+                            </select>
+                            <button @click="makeDeposit()" class="w-full p-3 mt-4 bg-primary text-white font-semibold rounded-md transition hover:bg-primary-dark" :disabled="isLoading">
+                                <span x-show="!isLoading">Deposit</span>
+                                <span x-show="isLoading">Processing...</span>
+                            </button>
                         </div>
-
-                        <!-- Account Verification Issue Modal -->
-                        <div x-show="showVerificationIssue"
-                             class="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black bg-opacity-50"
-                             x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="opacity-0"
-                             x-transition:enter-end="opacity-100"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100"
-                             x-transition:leave-end="opacity-0"
-                             @keydown.escape="showVerificationIssue = false">
-                            <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6"
-                                 @click.away="showVerificationIssue = false"
-                                 x-transition:enter="transition ease-out duration-300"
-                                 x-transition:enter-start="opacity-0 transform scale-95"
-                                 x-transition:enter-end="opacity-100 transform scale-100"
-                                 x-transition:leave="transition ease-in duration-200"
-                                 x-transition:leave-start="opacity-100 transform scale-100"
-                                 x-transition:leave-end="opacity-0 transform scale-95">
-
-                                <!-- Error Icon -->
-                                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-50 mb-4">
-                                    <svg class="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        <div class="p-5" x-show="currentAction === 'transfer'">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Transfer Between Accounts</h2>
+                            <label for="internalFrom" class="block text-sm font-medium text-gray-500 mt-3">From Account</label>
+                            <select id="internalFrom" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="internalFromAccount">
+                                <option x-text="'Checking - ' + formatCurrency(checkingBalance)" value="checking"></option>
+                                <option x-text="'Savings - ' + formatCurrency(savingsBalance)" value="savings"></option>
+                            </select>
+                            <label for="internalTo" class="block text-sm font-medium text-gray-500 mt-3">To Account</label>
+                            <select id="internalTo" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="internalToAccount">
+                                <option x-text="'Savings - ' + formatCurrency(savingsBalance)" value="savings" x-show="internalFromAccount === 'checking'"></option>
+                                <option x-text="'Checking - ' + formatCurrency(checkingBalance)" value="checking" x-show="internalFromAccount === 'savings'"></option>
+                            </select>
+                            <label for="internalAmount" class="block text-sm font-medium text-gray-500 mt-3">Amount</label>
+                            <input id="internalAmount" type="number" class="w-full p-3 mt-2 border border-gray-200 rounded-md text-base" x-model="internalTransferAmount" step="0.01" placeholder="$0.00">
+                            <button @click="transferBetweenAccounts()" class="w-full p-3 mt-4 bg-primary text-white font-semibold rounded-md transition hover:bg-primary-dark" :disabled="isLoading">
+                                <span x-show="!isLoading">Transfer</span>
+                                <span x-show="isLoading">Processing...</span>
+                            </button>
+                        </div>
+                        <div class="p-5" x-show="currentAction === 'cards'">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Manage Cards</h2>
+                            <div class="flex flex-col gap-4">
+                                <template x-for="(card, index) in cards" :key="index">
+                                    <div class="bg-gradient-to-br text-white rounded-xl p-4 shadow-md relative overflow-hidden"
+                                         :class="{ 'from-primary to-primary-dark': card.type === 'debit', 'from-secondary to-red-800': card.type === 'credit', 'opacity-75 grayscale': card.isLocked }">
+                                        <div class="text-lg tracking-wider mb-5" x-text="card.number"></div>
+                                        <div class="flex justify-between mb-4">
+                                            <div class="text-sm font-medium" x-text="userName"></div>
+                                            <div class="text-sm opacity-80" x-text="card.type === 'debit' ? 'Debit Card' : 'Credit Card'"></div>
+                                            <div class="text-sm" x-text="'Exp: ' + card.expiry"></div>
+                                        </div>
+                                        <div class="flex items-center justify-between border-t border-white border-opacity-20 pt-3">
+                                            <button @click="orderNewCard()" class="text-sm hover:underline">Order New Card</button>
+                                            <button @click="toggleCardLock(index)" class="px-3 py-1 bg-white bg-opacity-20 rounded-lg text-sm hover:bg-opacity-30">
+                                                <span x-text="card.isLocked ? 'Unlock Card' : 'Lock Card'"></span>
+                                            </button>
+                                        </div>
+                                        <div x-show="card.isLocked" class="absolute top-0 right-0 mt-3 mr-3">
+                                            <div class="bg-white text-primary font-semibold px-2 py-1 rounded text-xs">
+                                                <svg class="w-3 h-3 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                </svg>
+                                                LOCKED
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <button @click="addNewCard()" class="p-4 bg-gray-100 text-primary font-semibold border-2 border-dashed border-primary rounded-xl text-center transition hover:bg-primary hover:bg-opacity-5 flex items-center justify-center w-full">
+                                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                     </svg>
-                                </div>
-
-                                <!-- Different messages based on attempt count -->
-                                <template x-if="attemptCount == 1">
-                                    <div>
-                                        <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Verification Required</h3>
-                                        <p class="text-gray-600 mb-4 text-center">
-                                            We need to verify your identity before adding a new card to your account.
-                                        </p>
-                                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-4">
-                                            <div class="flex">
-                                                <div class="ml-3">
-                                                    <p class="text-sm text-yellow-700">Please call our Customer Service department at <span class="font-bold">1-800-555-0123</span> for assistance.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-
-                                <template x-if="attemptCount == 2">
-                                    <div>
-                                        <h3 class="text-xl font-bold text-red-600 text-center mb-2">Unusual Activity Detected</h3>
-                                        <p class="text-gray-600 mb-4 text-center">
-                                            Our security system has detected unusual activity on your account. For your protection, we've temporarily restricted new card additions.
-                                        </p>
-                                        <div class="bg-red-50 border-l-4 border-red-400 p-3 mb-4">
-                                            <div class="flex">
-                                                <div class="ml-3">
-                                                    <p class="text-sm text-red-700">Please contact our Fraud Prevention team at <span class="font-bold">1-800-555-0123</span> as soon as possible to verify your identity.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-
-                                <template x-if="attemptCount >= 3">
-                                    <div>
-                                        <h3 class="text-xl font-bold text-red-600 text-center mb-2">Account Locked</h3>
-                                        <p class="text-gray-600 mb-4 text-center">
-                                            Due to multiple unsuccessful attempts, your account access has been temporarily restricted.
-                                        </p>
-                                        <div class="bg-red-50 border-l-4 border-red-500 p-3 mb-4">
-                                            <div class="flex">
-<div class="ml-3">
-                                                    <p class="text-sm text-red-700 font-bold">Security Code: #ERR-37291</p>
-                                                    <p class="text-sm text-red-700 mt-1">Please call our Account Security department at <span class="font-bold">1-800-555-0123</span> and provide this code to restore full account access.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="text-xs text-gray-500 text-center">This restriction is for your protection and will remain in place until your identity is verified.</p>
-                                    </div>
-                                </template>
-
-                                <div class="flex justify-center mt-4">
-                                    <button @click="showVerificationIssue = false" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">
-                                        Close
-                                    </button>
-                                </div>
+                                    Add New Card
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Transaction Receipt -->
-            <div class="mx-4 mb-6 bg-white rounded-lg shadow p-5" x-show="showReceipt" x-transition>
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Transaction Receipt</h2>
-                <p class="text-sm my-2"><span class="font-semibold text-gray-800">From:</span> <span x-text="fromAccount"></span></p>
-                <p class="text-sm my-2"><span class="font-semibold text-gray-800">To:</span> <span x-text="toAccount"></span></p>
-                <p class="text-sm my-2"><span class="font-semibold text-gray-800">Amount:</span> <span x-text="formatCurrency(transferAmount)"></span></p>
-                <p class="text-sm my-2"><span class="font-semibold text-gray-800">Date:</span> <span x-text="txDate"></span></p>
-                <p class="text-sm my-2"><span class="font-semibold text-gray-800">Transaction ID:</span> <span x-text="txId"></span></p>
-                <button @click="showReceipt = false"
-                        class="w-full p-3 mt-4 bg-primary text-white font-semibold rounded-md transition hover:bg-primary-dark">
-                    Close
-                </button>
-            </div>
+                    <!-- Transaction Receipt -->
+                    <div class="mx-4 mb-6 bg-white rounded-lg shadow p-5" x-show="showReceipt" x-transition>
+                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Transaction Receipt</h2>
+                        <p class="text-sm my-2"><span class="font-semibold text-gray-800">From:</span> <span x-text="fromAccount"></span></p>
+                        <p class="text-sm my-2"><span class="font-semibold text-gray-800">To:</span> <span x-text="toAccount"></span></p>
+                        <p class="text-sm my-2"><span class="font-semibold text-gray-800">Amount:</span> <span x-text="formatCurrency(lastTransactionAmount)"></span></p>
+                        <p class="text-sm my-2"><span class="font-semibold text-gray-800">Date:</span> <span x-text="txDate"></span></p>
+                        <p class="text-sm my-2"><span class="font-semibold text-gray-800">Transaction ID:</span> <span x-text="txId"></span></p>
+                        <button @click="showReceipt = false" class="w-full p-3 mt-4 bg-primary text-white font-semibold rounded-md transition hover:bg-primary-dark">Close</button>
+                    </div>
 
-            <!-- Transaction History Section -->
-            <div class="flex justify-between items-center mx-4 mt-6 mb-4">
-                <div class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Transaction History</div>
-                <div class="text-xs text-primary-dark font-bold cursor-pointer hover:underline">
-                    View All
-                </div>
-            </div>
-
-            <!-- Account Filter Tabs -->
-            <div class="mx-4 mb-4">
-                <div class="flex space-x-1 bg-gray-200 p-1 rounded-lg">
-                    <button @click="transactionFilter = 'all'"
-                            class="flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all"
-                            :class="{ 'bg-white shadow text-primary font-bold': transactionFilter === 'all', 'text-gray-600 hover:bg-gray-100': transactionFilter !== 'all' }">
-                        All
-                    </button>
-                    <button @click="transactionFilter = 'checking'"
-                            class="flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all"
-                            :class="{ 'bg-white shadow text-primary font-bold': transactionFilter === 'checking', 'text-gray-600 hover:bg-gray-100': transactionFilter !== 'checking' }">
-                        Checking
-                    </button>
-                    <button @click="transactionFilter = 'savings'"
-                            class="flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all"
-                            :class="{ 'bg-white shadow text-primary font-bold': transactionFilter === 'savings', 'text-gray-600 hover:bg-gray-100': transactionFilter !== 'savings' }">
-                        Savings
-                    </button>
-                </div>
-            </div>
-
-            <!-- Transaction List -->
-            <div class="mx-4 mb-6 bg-white rounded-xl shadow-sm overflow-hidden">
-                <!-- Optional monthly summary card -->
-                <div class="p-3 border-b border-gray-200 bg-gray-100">
-                    <div class="text-xs font-semibold text-gray-600 mb-1">This Month</div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="bg-white p-2 rounded-lg border border-gray-200 shadow-sm">
-                            <div class="text-xs text-gray-600 font-medium">Income</div>
-                            <div class="text-sm font-semibold text-success">+$3,240.25</div>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg border border-gray-200 shadow-sm">
-                            <div class="text-xs text-gray-600 font-medium">Expenses</div>
-                            <div class="text-sm font-semibold text-red-500">-$1,642.31</div>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg border border-gray-200 shadow-sm">
-                            <div class="text-xs text-gray-600 font-medium">Net</div>
-                            <div class="text-sm font-semibold text-primary">+$1,597.94</div>
+                    <!-- Transaction History -->
+                    <div class="flex justify-between items-center mx-4 mt-6 mb-4">
+                        <div class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Transaction History</div>
+                        <div class="text-xs text-primary-dark font-bold cursor-pointer hover:underline" @click="viewAllTransactions()">View All</div>
+                    </div>
+                    <div class="mx-4 mb-4">
+                        <div class="flex space-x-1 bg-gray-200 p-1 rounded-lg">
+                            <button @click="transactionFilter = 'all'" class="flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all" :class="{ 'bg-white shadow text-primary font-bold': transactionFilter === 'all', 'text-gray-600 hover:bg-gray-100': transactionFilter !== 'all' }">All</button>
+                            <button @click="transactionFilter = 'checking'" class="flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all" :class="{ 'bg-white shadow text-primary font-bold': transactionFilter === 'checking', 'text-gray-600 hover:bg-gray-100': transactionFilter !== 'checking' }">Checking</button>
+                            <button @click="transactionFilter = 'savings'" class="flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all" :class="{ 'bg-white shadow text-primary font-bold': transactionFilter === 'savings', 'text-gray-600 hover:bg-gray-100': transactionFilter !== 'savings' }">Savings</button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Transaction items -->
-                <template x-for="(tx, index) in filteredTransactions" :key="index">
-                    <div class="p-3 border-b border-gray-200 transition-all hover:bg-gray-50 cursor-pointer"
-                         :class="{ 'border-b-0': index === filteredTransactions.length - 1 }">
-                        <div class="flex items-center">
-                            <!-- Transaction icon -->
-                            <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3 shadow-sm border"
-                                 :class="{
-                                     'bg-red-100 text-red-600 border-red-200': tx.amount < 0 && tx.type !== 'internal',
-                                     'bg-green-100 text-green-600 border-green-200': tx.amount > 0 && tx.type !== 'internal',
-                                     'bg-blue-100 text-blue-600 border-blue-200': tx.type === 'internal'
-                                 }">
-                                <!-- Custom icons instead of emojis -->
-                                <svg x-show="tx.amount < 0 && tx.type !== 'internal'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                                <svg x-show="tx.amount > 0 && tx.type !== 'internal'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                                <svg x-show="tx.type === 'internal'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                                </svg>
-                            </div>
-
-                            <!-- Transaction details -->
-                            <div class="flex-1 min-w-0">
-                                <div class="flex justify-between items-start">
-                                    <div class="truncate font-medium text-gray-800" x-text="tx.description"></div>
-                                    <div class="font-bold text-right whitespace-nowrap ml-2"
-                                         :class="{
-                                             'text-red-600': tx.amount < 0,
-                                             'text-green-600': tx.amount > 0
-                                         }"
-                                         x-text="formatCurrency(tx.amount)"></div>
-                                </div>
-                                <div class="flex items-center text-xs text-gray-600 mt-1">
-                                    <span x-text="formatDate(tx.date)"></span>
-                                    <div class="flex items-center ml-2" x-show="tx.account">
-                                        <div class="w-1 h-1 rounded-full bg-gray-400 mx-1"></div>
-                                        <span class="px-1.5 py-0.5 rounded font-medium"
-                                              :class="{
-                                                'text-white bg-secondary': tx.account === 'checking',
-                                                'text-white bg-success': tx.account === 'savings'
-                                              }"
-                                              x-text="tx.account === 'checking' ? 'Checking' : 'Savings'"></span>
+                    <div class="mx-4 mb-6 bg-white rounded-xl shadow-sm overflow-hidden">
+                        <template x-for="(tx, index) in filteredTransactions" :key="index">
+                            <div class="p-3 border-b border-gray-200 transition-all hover:bg-gray-50 cursor-pointer" :class="{ 'border-b-0': index === filteredTransactions.length - 1 }">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3 shadow-sm border"
+                                         :class="{ 'bg-red-100 text-red-600 border-red-200': tx.amount < 0 && tx.type !== 'internal', 'bg-green-100 text-green-600 border-green-200': tx.amount > 0 && tx.type !== 'internal', 'bg-blue-100 text-blue-600 border-blue-200': tx.type === 'internal' }">
+                                        <svg x-show="tx.amount < 0 && tx.type !== 'internal'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        <svg x-show="tx.amount > 0 && tx.type !== 'internal'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                        <svg x-show="tx.type === 'internal'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex justify-between items-start">
+                                            <div class="truncate font-medium text-gray-800" x-text="tx.description"></div>
+                                            <div class="font-bold text-right whitespace-nowrap ml-2" :class="{ 'text-red-600': tx.amount < 0, 'text-green-600': tx.amount > 0 }" x-text="formatCurrency(tx.amount)"></div>
+                                        </div>
+                                        <div class="flex items-center text-xs text-gray-600 mt-1">
+                                            <span x-text="formatDate(tx.date)"></span>
+                                            <div class="flex items-center ml-2" x-show="tx.account">
+                                                <div class="w-1 h-1 rounded-full bg-gray-400 mx-1"></div>
+                                                <span class="px-1.5 py-0.5 rounded font-medium" :class="{ 'text-white bg-secondary': tx.account === 'checking', 'text-white bg-success': tx.account === 'savings' }" x-text="tx.account === 'checking' ? 'Checking' : 'Savings'"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Transaction categories/tags - could be expanded -->
-                        <div class="mt-2 flex flex-wrap gap-1" x-show="tx.amount < 0">
-                            <span class="text-xs py-0.5 px-2 bg-gray-200 text-gray-700 rounded-full border border-gray-300">
-                                <span x-show="tx.description.includes('Coffee')">☕ Food & Drink</span>
-                                <span x-show="tx.description.includes('Grocery')">🛒 Groceries</span>
-                                <span x-show="tx.description.includes('Amazon')">🛍 Shopping</span>
-                                <span x-show="!tx.description.includes('Coffee') && !tx.description.includes('Grocery') && !tx.description.includes('Amazon')">💼 General</span>
-                            </span>
-                        </div>
+                        </template>
                     </div>
-                </template>
-
-                <!-- Empty state -->
-                <div x-show="filteredTransactions.length === 0" class="py-10 px-4 text-center">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-200 text-gray-500 mb-3 border border-gray-300">
-                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <p class="text-gray-600 font-medium mb-1">No transactions yet</p>
-                    <p class="text-xs text-gray-500">Transactions will appear here when you make them</p>
-                    <button class="mt-4 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-md shadow-sm hover:bg-primary-dark">
-                        Make a Transaction
-                    </button>
                 </div>
-            </div>
+
+                <!-- Payments Page -->
+                <div x-show="currentPage === 'payments'" class="mx-4 mt-4 bg-white rounded-lg shadow p-5">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Payments</h2>
+                    <p class="text-gray-600 mb-4">Manage your payments here.</p>
+                    <button @click="setActiveAction('send')" class="w-full p-3 bg-primary text-white rounded-md hover:bg-primary-dark">Send a Payment</button>
+                </div>
+
+                <!-- Stats Page -->
+                <div x-show="currentPage === 'stats'" class="mx-4 mt-4 bg-white rounded-lg shadow p-5" x-init="loadStats()">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Account Statistics</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-100 p-3 rounded-lg">
+                            <p class="text-sm text-gray-600">Total Spent (Month)</p>
+                            <p class="text-lg font-bold text-red-600" x-text="formatCurrency(getMonthlyStats().expenses)"></p>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded-lg">
+                            <p class="text-sm text-gray-600">Total Received (Month)</p>
+                            <p class="text-lg font-bold text-green-600" x-text="formatCurrency(getMonthlyStats().income)"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div x-show="currentPage === 'stats'" class="mx-4 mt-4 bg-white rounded-lg shadow p-5" x-init="initChart()">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Account Statistics</h2>
+                    <div class="w-full">
+                        <canvas id="statsChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
 
             <!-- Edit Modal -->
-            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-                 x-show="showEditModal"
-                 x-transition>
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" x-show="showEditModal" x-transition>
                 <div class="bg-white w-11/12 max-w-md rounded-lg p-6 shadow-xl">
                     <h3 class="text-lg mb-4" x-text="editModalTitle"></h3>
-                    <input type="text"
-                           class="w-full p-3 mb-4 border border-gray-300 rounded-md text-base"
-                           x-model="editValue"
-                           x-ref="editInput">
+                    <input type="text" class="w-full p-3 mb-4 border border-gray-300 rounded-md text-base" x-model="editValue" x-ref="editInput">
                     <div class="flex justify-end gap-3">
-                        <button @click="saveEdit()"
-                                class="px-4 py-2.5 bg-primary text-white font-semibold rounded-md">
-                            Save
-                        </button>
-                        <button @click="cancelEdit()"
-                                class="px-4 py-2.5 bg-gray-100 text-gray-500 font-semibold rounded-md">
-                            Cancel
-                        </button>
+                        <button @click="saveEdit()" class="px-4 py-2.5 bg-primary text-white font-semibold rounded-md">Save</button>
+                        <button @click="cancelEdit()" class="px-4 py-2.5 bg-gray-100 text-gray-500 font-semibold rounded-md">Cancel</button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Menu -->
+            <div x-show="showQuickActions" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-4 z-40 w-64" @click.away="showQuickActions = false">
+                <h3 class="text-lg font-semibold mb-3">Quick Actions</h3>
+                <div class="space-y-2">
+                    <button @click="setActiveAction('send'); showQuickActions = false" class="w-full text-left p-2 hover:bg-gray-100 rounded-md">Send Money</button>
+                    <button @click="setActiveAction('deposit'); showQuickActions = false" class="w-full text-left p-2 hover:bg-gray-100 rounded-md">Deposit Funds</button>
+                    <button @click="setActiveAction('transfer'); showQuickActions = false" class="w-full text-left p-2 hover:bg-gray-100 rounded-md">Transfer Between Accounts</button>
+                    <button @click="setActiveAction('cards'); showQuickActions = false" class="w-full text-left p-2 hover:bg-gray-100 rounded-md">Manage Cards</button>
                 </div>
             </div>
 
             <!-- Navigation Bar -->
             <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white shadow-lg border-t border-gray-200 z-30">
-                <!-- Main Navigation -->
                 <div class="flex justify-around">
                     <template x-for="(item, index) in navItems" :key="index">
-                        <button
-                            class="flex flex-col items-center justify-center py-2 px-1 w-1/4 relative transition-colors"
-                            :class="{ 'text-primary': currentNav === item.id, 'text-gray-500': currentNav !== item.id }"
-                            @click="setActiveNav(item.id)">
-
-                            <!-- Active Indicator Dot -->
-                            <div x-show="currentNav === item.id" class="absolute top-0 w-1 h-1 rounded-full bg-primary"></div>
-
-                            <!-- Icon Container -->
+                        <button class="flex flex-col items-center justify-center py-2 px-1 w-1/4 relative transition-colors"
+                                :class="{ 'text-primary': currentPage === item.id, 'text-gray-500': currentPage !== item.id }"
+                                @click="setActiveNav(item.id)">
+                            <div x-show="currentPage === item.id" class="absolute top-0 w-1 h-1 rounded-full bg-primary"></div>
                             <div class="w-6 h-6 mb-1 flex items-center justify-center">
-                                <!-- Home Icon -->
-                                <svg x-show="item.id === 'home'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                </svg>
-
-                                <!-- Payments Icon -->
-                                <svg x-show="item.id === 'payments'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-
-                                <!-- Stats Icon -->
-                                <svg x-show="item.id === 'stats'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
-
-                                <!-- Settings Icon -->
-                                <svg x-show="item.id === 'settings'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
+                                <svg x-show="item.id === 'home'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                                <svg x-show="item.id === 'payments'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <svg x-show="item.id === 'stats'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                                <svg x-show="item.id === 'settings'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                             </div>
-
-                            <!-- Label -->
                             <span class="text-xs font-medium" x-text="item.label"></span>
                         </button>
                     </template>
                 </div>
-
-                <!-- Action Button -->
                 <div class="absolute -top-6 left-1/2 transform -translate-x-1/2">
-                    <button
-                        class="w-12 h-12 rounded-full bg-primary shadow-lg flex items-center justify-center text-white"
-                        @click="alert('Quick actions')">
+                    <button class="w-12 h-12 rounded-full bg-primary shadow-lg flex items-center justify-center text-white" @click="showQuickActions = !showQuickActions">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
@@ -762,38 +409,14 @@
             </div>
 
             <!-- Notification Toast -->
-            <div
-                x-show="showNotification"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 transform translate-y-2"
-                x-transition:enter-end="opacity-100 transform translate-y-0"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 transform translate-y-0"
-                x-transition:leave-end="opacity-0 transform translate-y-2"
-                class="fixed bottom-20 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-end sm:justify-center sm:p-0 z-50"
-                style="pointer-events: none;">
-                <div class="bg-white rounded-lg shadow-xl overflow-hidden max-w-sm w-full p-4 flex items-center border-l-4"
-                     :class="{
-                         'border-success': notificationType === 'success',
-                         'border-danger': notificationType === 'error',
-                         'border-primary': notificationType === 'info'
-                     }">
+            <div x-show="showNotification" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform translate-y-2" class="fixed bottom-20 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-end sm:justify-center sm:p-0 z-50" style="pointer-events: none;">
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden max-w-sm w-full p-4 flex items-center border-l-4" :class="{ 'border-success': notificationType === 'success', 'border-danger': notificationType === 'error', 'border-primary': notificationType === 'info', 'border-warning': notificationType === 'warning' }">
                     <div class="mr-4 flex-shrink-0">
-                        <div class="rounded-full p-2"
-                             :class="{
-                                 'bg-success bg-opacity-20': notificationType === 'success',
-                                 'bg-danger bg-opacity-20': notificationType === 'error',
-                                 'bg-primary bg-opacity-20': notificationType === 'info'
-                             }">
-                            <svg x-show="notificationType === 'success'" class="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <svg x-show="notificationType === 'error'" class="h-5 w-5 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            <svg x-show="notificationType === 'info'" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
+                        <div class="rounded-full p-2" :class="{ 'bg-success bg-opacity-20': notificationType === 'success', 'bg-danger bg-opacity-20': notificationType === 'error', 'bg-primary bg-opacity-20': notificationType === 'info', 'bg-warning bg-opacity-20': notificationType === 'warning' }">
+                            <svg x-show="notificationType === 'success'" class="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg x-show="notificationType === 'error'" class="h-5 w-5 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            <svg x-show="notificationType === 'info'" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <svg x-show="notificationType === 'warning'" class="h-5 w-5 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                         </div>
                     </div>
                     <div class="flex-1">
@@ -804,7 +427,6 @@
             </div>
         </div>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
